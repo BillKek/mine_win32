@@ -1,7 +1,13 @@
 { -*- mode: opascal -*- }
 program Mine;
 
-uses Termio;
+uses
+{$IFNDEF WIN32}
+  termio;
+{$ELSE}
+  Crt;
+{$ENDIF}
+
 
 const
    STDIN_FILENO = 0;
@@ -236,8 +242,12 @@ type
 
    procedure FieldRedisplay(Field: Field);
    begin
+{$IFNDEF WIN32}
       Write(Chr(27), '[', Field.Rows,   'A');
       Write(Chr(27), '[', Field.Cols*3, 'D');
+{$ELSE}
+	ClrScr;
+{$ENDIF}
       FieldDisplay(Field);
    end;
 
@@ -275,12 +285,17 @@ type
 
 var
    MainField: Field;
+
+{$IFNDEF WIN32}
    SavedTAttr, TAttr: Termios;
+{$ENDIF}
+
    Cmd: Char;
    Quit: Boolean;
 begin
    Randomize;
 
+{$IFNDEF WIN32}
    if IsATTY(STDIN_FILENO) = 0 then
    begin
       WriteLn('ERROR: this is not a terminal!');
@@ -293,6 +308,9 @@ begin
    TAttr.c_cc[VMIN] := 1;
    TAttr.c_cc[VTIME] := 0;
    TCSetAttr(STDIN_FILENO, TCSAFLUSH, &tattr);
+{$ELSE}
+	ClrScr;
+{$ENDIF}
 
    FieldReset(MainField, HardcodedFieldRows, HardcodedFieldCols);
    FieldDisplay(MainField);
@@ -300,7 +318,7 @@ begin
    Quit := False;
    while not Quit do
    begin
-      Read(Cmd);
+      Cmd:=ReadKey;
       case Cmd of
          'w': begin
                  MoveUp(MainField);
@@ -365,5 +383,7 @@ begin
       end;
    end;
 
+{$IFNDEF WIN32}
    TCSetAttr(STDIN_FILENO, TCSANOW, SavedTAttr);
+{$ENDIF}
 end.
