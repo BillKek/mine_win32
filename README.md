@@ -4,11 +4,12 @@
 
 ## Quick Start
 
-It's written in [Free Pascal](https://www.freepascal.org/download.html) (sorry about that).
+It's written in [Free Pascal](https://www.freepascal.org/download.html) (i will not apologize).
 
 ```console
-$ fpc ./mine.pas
-$ ./mine
+> edit build_win32.bat
+> build_win32.bat
+> mine.exe
 ```
 
 ## Controls
