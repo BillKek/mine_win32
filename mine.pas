@@ -42,7 +42,7 @@ type
             for Col := 0 to Cols-1 do
                case States[Row][Col] of
                   Open:    if Cells[Row][Col] <> Empty then Exit(False);
-                  Closed:  Exit(False);
+                  Closed:  if Cells[Row][Col] <> Bomb then Exit(False);
                   Flagged: if Cells[Row][Col] <> Bomb then Exit(False);
                end;
       IsVictory := True;
