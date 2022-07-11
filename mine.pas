@@ -1,6 +1,9 @@
 { -*- mode: opascal -*- }
 program Mine;
 
+// {$DEFINE DEBUG}
+
+
 uses
 {$IFNDEF WIN32}
   termio;
